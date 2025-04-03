@@ -1,0 +1,378 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construmec Santo Tomé</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="offers.css">
+    <link rel="stylesheet" href="payment-modal.css">
+    <link rel="stylesheet" href="reviews.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+    <script type="importmap">
+        {
+            "imports": {
+                "gsap": "https://cdn.skypack.dev/gsap@3.12.5",
+                "allProducts": "./allProducts.js",
+                "makeWebhook": "./makeWebhook.js",
+                "./config.js": "./config.js",
+                "./payment-modal.js": "./payment-modal.js"
+            }
+        }
+    </script>
+    <style>
+        /* Styles for ARS price display */
+        .product-card .price, .offer-card .price, #product-modal .price {
+            display: flex;
+            flex-direction: column; /* Stack prices vertically */
+            align-items: center; /* Center prices */
+            gap: 2px; /* Small gap between USD and ARS */
+            /* margin-bottom: 10px;  Removed margin-bottom here, adjusted in main css */
+        }
+
+        .price-usd, .price-usd-original {
+            font-size: 1em; /* Base size for USD */
+            font-weight: bold;
+            color: #eee; /* Lighter color for USD */
+        }
+        .price-ars, .price-ars-original {
+            font-size: 0.9em; /* Slightly smaller for ARS */
+            color: #ffc107; /* Theme color for ARS */
+        }
+        .price-unavailable {
+             font-size: 0.9em;
+             color: #aaa;
+        }
+
+        /* Specific styles for offer card prices */
+        .offer-card .price {
+            gap: 5px;
+            align-items: flex-start; /* Align offer prices left */
+        }
+        .offer-card .offer-price-current {
+            /* display: flex; gap: 5px; align-items: baseline; */
+             display: flex;
+             flex-direction: column;
+             align-items: flex-start;
+        }
+        .offer-card .offer-price-original {
+            display: flex;
+             flex-direction: column;
+            align-items: flex-start;
+             text-decoration: line-through;
+             opacity: 0.7;
+        }
+
+        .offer-card .price-usd { color: #28a745; } /* Green current USD */
+        .offer-card .price-ars { color: #28a745; } /* Green current ARS */
+        .offer-card .price-usd-original { font-size: 0.8em; color: #ccc; }
+        .offer-card .price-ars-original { font-size: 0.75em; color: #aaa; }
+
+        /* Styles for modal prices */
+         #product-modal .modal-price-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            /* margin-bottom: 20px; Removed, handled by .price */
+        }
+        #product-modal .price-usd {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffc107; /* Yellow USD in modal */
+        }
+         #product-modal .price-ars {
+            font-size: 1.2rem;
+            color: #eee; /* White ARS in modal */
+         }
+        #product-modal .modal-price-original {
+             margin-top: 5px;
+             opacity: 0.7;
+             text-decoration: line-through;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             gap: 2px;
+         }
+         #product-modal .price-usd-original {
+             font-size: 1rem;
+             color: #ccc;
+         }
+          #product-modal .price-ars-original {
+             font-size: 0.9rem;
+             color: #aaa;
+         }
+
+        /* Dollar rate display */
+        .dollar-rate-container {
+            background-color: #000;
+            color: #ffc107;
+            padding: 5px 10px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 5px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Cart Item Details Layout */
+        .cart-item-details {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+        }
+         /* Ensure product card price area has enough space */
+        .product-card .price {
+             min-height: 2.5em; /* Adjust as needed */
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .hero p {
+            animation: fadeInUp 1.2s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #product-modal.active {
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes modalPop {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+         .visually-hidden {
+             position: absolute;
+             width: 1px;
+             height: 1px;
+             padding: 0;
+             margin: -1px;
+             overflow: hidden;
+             clip: rect(0, 0, 0, 0);
+             white-space: nowrap;
+             border: 0;
+         }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/">Construmec Santo Tomé</a>
+            <div id="dollar-rate-container" class="dollar-rate-container">
+                Cotización: Cargando...
+            </div>
+        </div>
+        <nav>
+            <div class="categories-dropdown">
+                <a href="#" id="categories-link">Categorías <i class="fas fa-caret-down"></i></a>
+                <div class="categories-menu">
+                    <a href="#" data-category="all" class="active">Todos los productos</a>
+                    <a href="#" data-category="herramientas">🔧 Herramientas</a>
+                    <a href="#" data-category="consumibles">🔩 Consumibles</a>
+                </div>
+            </div>
+            <a href="#exclusive-offers-section">Ofertas</a>
+            <a href="#footer-content">Contacto</a>
+        </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar repuestos y herramientas..." aria-label="Buscar productos">
+            <button aria-label="Buscar"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="cart">
+            <a href="#" aria-label="Ver carrito de compras">
+                <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                <span>Carrito</span>
+                <span id="cart-count" aria-live="polite">0</span>
+            </a>
+            <div id="cart-container" role="dialog" aria-modal="true" aria-labelledby="cart-heading">
+                <!-- Cart items will be dynamically inserted here -->
+                <h3 id="cart-heading" class="visually-hidden">Resumen del carrito</h3>
+                <p>El carrito está vacío.</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" style="background-image: url('/construmec_logo.png'); background-blend-mode: multiply; background-color: rgba(34, 34, 34, 0.7); background-size: contain; background-repeat: no-repeat; background-position: center 10%;">
+        <div class="hero-content" style="padding-top: 150px;"> <!-- Adjust padding to push content below logo -->
+            <h1>Encuentra todo lo que necesitas para tus reparaciones</h1>
+            <p>Las mejores herramientas profesionales <span style="color:#ffc107; font-weight:bold;">INGCO</span> al mejor precio</p>
+            <a href="#featured-products-section" class="cta-button">Ver Productos</a>
+        </div>
+    </section>
+
+    <section class="exclusive-offers" id="exclusive-offers-section">
+        <h2>Ofertas Exclusivas<span style="display:inline-block; color:#dc3545; font-size:0.8em; animation: pulse 2s infinite; margin-left:10px;">¡Tiempo limitado!</span></h2>
+        <div class="offers-grid">
+            <!-- Exclusive offer products will be dynamically inserted here -->
+            <p>Cargando ofertas...</p>
+        </div>
+    </section>
+
+    <section class="featured-products" id="featured-products-section">
+        <h2>Productos Destacados</h2>
+        <div class="product-grid">
+            <!-- Product cards will be dynamically inserted here -->
+            <p>Cargando productos...</p>
+        </div>
+
+        <!-- Producto agregado manualmente - Consider removing if stock is managed dynamically -->
+        <!-- <div class="producto" data-nombre="Camiseta Azul">
+            <h2>Camiseta Azul</h2>
+            <p class="stock">Stock: 10</p>
+        </div> -->
+    </section>
+
+    <footer>
+        <div class="footer-content" id="footer-content">
+             <div class="footer-info">
+                <p>&copy; 2024 Construmec Santo Tomé. Todos los derechos reservados.</p>
+                <p>Las imágenes son a modo ilustrativo. Los precios en ARS pueden variar según cotización del dólar.</p>
+            </div>
+            <div class="footer-contact">
+                <h3>Contacto</h3>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <a href="https://maps.google.com/maps?q=Calle+Candiotti+2315,+Santo+Tomé,+Santa+Fe,+Argentina" target="_blank" rel="noopener noreferrer">
+                        Dirección: Calle Candiotti 2315, Santo Tomé, Santa Fe, Argentina
+                    </a>
+                </p>
+                <p><i class="fas fa-phone-alt"></i> Teléfono: <a href="https://wa.me/543425968110" target="_blank" rel="noopener noreferrer">+54 9 342 5968110</a></p>
+                <p><i class="fas fa-clock"></i> Horario: Lunes a viernes de 7:00 a 15:30.</p>
+                <p><i class="fas fa-globe"></i> Sitio web: <a href="http://www.construmecsantotome.com" target="_blank">www.construmecsantotome.com</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/cristian.enciso.9212" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/construmecsantotome" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Modal Structure -->
+    <div id="modal-overlay" aria-hidden="true"></div>
+    <div id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-name" aria-describedby="modal-product-description" aria-hidden="true">
+        <button id="close-modal" aria-label="Cerrar modal">&times;</button>
+        <img id="modal-product-image" src="" alt="Imagen del producto">
+        <h2 id="modal-product-name">Nombre del Producto</h2>
+        <div id="modal-product-rating" class="modal-rating">
+            <!-- Stars will be inserted here by JS -->
+        </div>
+        <p id="modal-product-description">Descripción del producto...</p>
+        <div id="modal-product-price" class="price"> <!-- Price container -->
+             <!-- Prices will be inserted here by JS -->
+             <span class="price-unavailable">Cargando precio...</span>
+        </div>
+        <div class="quantity-control">
+            <button id="quantity-decrement" aria-label="Disminuir cantidad">-</button>
+            <input type="number" id="modal-quantity" value="1" min="1" aria-label="Cantidad">
+            <button id="quantity-increment" aria-label="Aumentar cantidad">+</button>
+        </div>
+        <button id="modal-add-to-cart">Añadir al carrito</button>
+        <div id="modal-product-reviews" class="modal-reviews">
+             <h4>Reseñas de Clientes</h4> <!-- Added default title -->
+            <!-- Reviews will be inserted here by JS -->
+        </div>
+    </div>
+
+    <!-- Payment Modal Structure (Redesigned Layout) -->
+    <div id="payment-modal-overlay" aria-hidden="true"></div>
+    <div id="payment-modal" role="dialog" aria-modal="true" aria-labelledby="payment-heading" aria-hidden="true">
+        <button id="close-payment-modal" aria-label="Cerrar modal de pago">&times;</button>
+        <h2 id="payment-heading">Procesar Pago</h2>
+
+        <div class="payment-modal-content">
+
+            <!-- Left Column: Customer Info & Shipping -->
+            <div class="payment-modal-left">
+                <form id="payment-customer-form" aria-labelledby="customer-info-heading">
+                    <h3 id="customer-info-heading">Información del Cliente y Envío</h3>
+                    <div class="form-group">
+                        <label for="payment-name">Nombre Completo</label>
+                        <input type="text" id="payment-name" name="name" required placeholder="Ingrese su nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-dni">DNI</label>
+                        <input type="text" id="payment-dni" name="dni" required placeholder="7 u 8 dígitos sin puntos" maxlength="8" pattern="\d{7,8}">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-email">Email</label>
+                        <input type="email" id="payment-email" name="email" required placeholder="ejemplo@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-phone">Teléfono (10 dígitos)</label>
+                        <input type="tel" id="payment-phone" name="phone" required placeholder="Ej: 3425123456" maxlength="10" pattern="\d{10}">
+                    </div>
+                </form>
+
+                <div class="shipping-options" aria-labelledby="shipping-heading">
+                    <h3 id="shipping-heading">Método de Entrega</h3>
+                    <div class="shipping-radio-group" role="radiogroup" aria-labelledby="shipping-heading">
+                        <label>
+                            <input type="radio" name="shipping-type" id="shipping-local-pickup" value="local-pickup" checked>
+                            Retiro en el local
+                        </label>
+                        <label>
+                            <input type="radio" name="shipping-type" id="shipping-delivery" value="delivery">
+                            Envío por encomienda
+                        </label>
+                    </div>
+
+                    <div id="delivery-address-form" class="hidden">
+                        <div class="form-group">
+                            <label for="delivery-address">Dirección de envío</label>
+                            <input type="text" id="delivery-address" placeholder="Calle, Número, Piso/Dpto (si aplica)">
+                        </div>
+                        <div class="form-group">
+                            <label for="postal-code">Código Postal</label>
+                            <input type="text" id="postal-code" placeholder="Ingrese su código postal">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Summary & Payment -->
+            <div class="payment-modal-right">
+                <div class="order-summary" aria-labelledby="order-summary-heading">
+                    <h3 id="order-summary-heading">Resumen del Pedido</h3>
+                    <div class="payment-amounts">
+                        <p><span>Subtotal:</span> <span id="payment-subtotal">$0.00</span></p>
+                        <p><span>IVA (21%):</span> <span id="payment-tax">$0.00</span></p>
+                        <p class="total-with-tax"><span>Total a pagar (ARS):</span> <span id="payment-total">$0.00</span></p> <!-- Clarify currency -->
+                    </div>
+                    <p id="order-number-display">Número de Orden: GENERANDO...</p>
+                </div>
+
+                <div class="payment-method" aria-labelledby="payment-method-heading">
+                    <h3 id="payment-method-heading" class="visually-hidden">Método de Pago</h3>
+                    <p>Escanee el código QR para pagar con Transferencia o Mercado Pago</p>
+                    <div class="qr-container">
+                        <img src="/Imagen de WhatsApp 2025-02-07 a las 09.46.50_ade0c242.jpg" alt="Código QR para pago con Transferencia/Mercado Pago" class="qr-code"> <!-- Updated QR Code -->
+                    </div>
+                    <p style="font-size: 0.85em; color: #6c757d;">Una vez confirmado el pago, procesaremos su pedido.</p>
+                </div>
+
+                <div class="payment-actions">
+                    <button id="complete-payment" class="complete-payment-button">Confirmar Pago y Orden</button>
+                    <button id="cancel-payment" class="cancel-payment-button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

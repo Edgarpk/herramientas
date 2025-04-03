@@ -1,0 +1,117 @@
+/* Styles for the footer section */
+
+footer {
+    background-color: #222; /* Dark footer */
+    color: #aaa; /* Lighter grey for footer text */
+    padding: 3rem 1rem; /* Increased padding */
+    margin-top: 3rem; /* Increased margin */
+    border-top: 1px solid #444;
+}
+
+.footer-content {
+    max-width: 1200px; /* Limit width */
+    margin: 0 auto; /* Center content */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 2rem; /* Gap between columns */
+    text-align: left; /* Align text left within columns */
+}
+
+.footer-info,
+.footer-contact,
+.footer-social {
+    margin-bottom: 1rem; /* Space below each section on small screens */
+}
+
+.footer-info p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.footer-contact h3,
+.footer-social h3 {
+    color: #ffc107; /* Yellow heading for sections */
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #444; /* Subtle separator */
+    padding-bottom: 0.5rem;
+}
+
+.footer-contact p {
+    margin-bottom: 0.7rem; /* Space between contact lines */
+    font-size: 0.9rem;
+    display: flex; /* Align icon and text */
+    align-items: flex-start; /* Align items to the top */
+    gap: 0.7rem; /* Space between icon and text */
+}
+
+.footer-contact i {
+    color: #ffc107; /* Yellow icons */
+    margin-top: 0.2em; /* Adjust icon vertical alignment */
+    width: 15px; /* Fixed width for icons */
+    text-align: center;
+}
+
+.footer-contact a {
+    color: #ffc107;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-contact a:hover {
+    color: #ffd700;
+    text-decoration: underline;
+}
+
+.footer-social .social-links {
+    margin-top: 0; /* Remove extra margin if any */
+}
+
+.footer-social .social-links a {
+    color: #aaa;
+    margin-right: 1rem; /* Spacing between social icons */
+    font-size: 1.6rem; /* Larger social icons */
+    transition: color 0.3s ease;
+}
+
+.footer-social .social-links a:hover {
+    color: #ffc107; /* Yellow on hover */
+}
+
+.qr-container {
+    display: flex; /* Use flexbox for centered content */
+    justify-content: center;
+    align-items: center;
+    max-width: 150px; /* Limit width */
+    margin: 0 auto; /* Center container */
+}
+
+.qr-code {
+    max-width: 100%; /* Responsive sizing */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensure entire QR code is visible */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
+        text-align: center; /* Center text on smaller screens */
+    }
+
+    .footer-contact p {
+        justify-content: center; /* Center contact info items */
+        text-align: left; /* Keep text left aligned */
+    }
+
+    .footer-contact i {
+        margin-top: 0.15em;
+    }
+
+    .footer-social .social-links {
+        justify-content: center; /* Center social links */
+    }
+    .footer-social .social-links a {
+        margin: 0 0.7rem; /* Adjust spacing */
+    }
+}

@@ -1,0 +1,90 @@
+/* styles.css is full, adding review styles here */
+
+/* Star Rating Styles */
+.stars {
+    color: #ffc107; /* Yellow stars */
+    font-size: 0.9em; /* Adjust size as needed */
+}
+
+.stars .far.fa-star { /* Style for empty stars */
+    color: #ccc; /* Lighter grey for empty stars */
+}
+
+.product-card-rating, .offer-card-rating { /* Rating container on cards */
+    margin-bottom: 8px; /* Space below rating */
+    min-height: 1.2em; /* Ensure space even if no rating */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.review-count {
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+/* Modal Rating and Reviews Styles */
+#product-modal .modal-rating {
+    text-align: center;
+    margin-bottom: 15px; /* Space below rating */
+    font-size: 1.2em; /* Slightly larger stars in modal */
+}
+
+#product-modal .modal-reviews {
+    margin-top: 25px; /* Space above reviews section */
+    border-top: 1px solid #444; /* Separator line */
+    padding-top: 20px;
+    max-height: 150px; /* Limit height and allow scroll */
+    overflow-y: auto;
+}
+
+#product-modal .modal-reviews h4 {
+    color: #ffc107;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+#product-modal .review-item {
+    background-color: #333; /* Slightly darker background for each review */
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 3px solid #ffc107; /* Accent border */
+}
+
+#product-modal .review-rating {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+#product-modal .review-text {
+    color: #eee;
+    font-style: italic;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+#product-modal .review-author {
+    color: #aaa;
+    font-size: 0.85em;
+    text-align: right;
+}
+
+/* Scrollbar for reviews */
+#product-modal .modal-reviews::-webkit-scrollbar {
+    width: 8px;
+}
+
+#product-modal .modal-reviews::-webkit-scrollbar-track {
+    background: #2a2a2a;
+}
+
+#product-modal .modal-reviews::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+#product-modal .modal-reviews::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}

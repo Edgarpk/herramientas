@@ -1,0 +1,346 @@
+/* Styles specifically for the Payment Modal */
+
+#payment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+    z-index: 1010;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    backdrop-filter: blur(4px); /* Add blur effect */
+}
+
+#payment-modal-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+#payment-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95); /* Start slightly smaller */
+    background-color: #f8f9fa; /* Lighter background for contrast */
+    color: #343a40; /* Darker text */
+    padding: 25px;
+    border-radius: 12px; /* More rounded corners */
+    z-index: 1011;
+    max-width: 700px; /* Wider modal for two columns */
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    max-height: 90vh; /* Limit height */
+}
+
+#payment-modal.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* Scale to full size */
+}
+
+#payment-modal h2 {
+    color: #212529; /* Darker heading */
+    margin-top: 0;
+    margin-bottom: 25px; /* More space below heading */
+    font-size: 1.6rem; /* Slightly larger heading */
+    text-align: center;
+    border-bottom: 1px solid #dee2e6; /* Lighter border */
+    padding-bottom: 15px;
+}
+
+.payment-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Increased gap between sections */
+}
+
+@media (min-width: 768px) {
+    .payment-modal-content {
+        flex-direction: row; /* Two columns on larger screens */
+    }
+    .payment-modal-left, .payment-modal-right {
+        flex: 1; /* Equal width columns */
+    }
+    .payment-modal-right {
+        border-left: 1px solid #dee2e6;
+        padding-left: 30px;
+    }
+}
+
+
+/* Form Styling */
+#payment-customer-form {
+    margin-bottom: 20px; /* Space below form */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px; /* Slightly more space */
+    color: #495057; /* Softer label color */
+    font-weight: 500; /* Slightly bolder labels */
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px; /* Larger padding for easier interaction */
+    border: 1px solid #ced4da; /* Standard border color */
+    border-radius: 6px; /* Slightly more rounded */
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.form-group input:focus {
+    border-color: #ffc107; /* Highlight with theme color */
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2); /* Subtle glow effect */
+    outline: none;
+}
+
+
+/* Shipping Options */
+.shipping-options h3 {
+    font-size: 1.1rem;
+    color: #343a40;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.shipping-radio-group {
+    display: flex;
+    gap: 20px; /* More space between radio options */
+    margin-bottom: 15px;
+}
+
+.shipping-radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between radio and text */
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #495057;
+}
+
+.shipping-radio-group input[type="radio"] {
+    accent-color: #ffc107; /* Theme color for radio */
+}
+
+#delivery-address-form {
+    margin-top: 15px;
+    padding-left: 10px;
+    border-left: 3px solid #ffc107; /* Indicate section */
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+}
+
+#delivery-address-form.visible {
+     max-height: 200px; /* Adjust as needed */
+     opacity: 1;
+}
+
+#delivery-address-form.hidden {
+    max-height: 0;
+    opacity: 0;
+    padding-left: 0;
+    border-left: none;
+    margin-top: 0;
+}
+
+/* Order Summary (Right Column) */
+.order-summary {
+    background-color: #e9ecef; /* Light grey background */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.order-summary h3 {
+    font-size: 1.1rem;
+    color: #343a40;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ced4da;
+}
+
+.payment-amounts p {
+    margin: 8px 0; /* Adjust spacing */
+    display: flex;
+    justify-content: space-between;
+    color: #495057; /* Softer text color */
+    font-size: 0.95rem;
+}
+.payment-amounts p span:last-child {
+    font-weight: 500; /* Slightly bolder amounts */
+    color: #343a40;
+}
+
+
+.payment-amounts .total-with-tax {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #adb5bd; /* Darker separator */
+    font-weight: bold;
+    font-size: 1.2rem; /* Larger total */
+    color: #212529; /* Darker total text */
+}
+
+#order-number-display {
+    font-size: 0.9rem;
+    color: #6c757d; /* Grey color */
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px dashed #dee2e6;
+}
+
+
+/* QR Code and Payment Method */
+.payment-method {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.payment-method p {
+    font-size: 0.95rem;
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+.qr-container {
+    background-color: #fff;
+    width: 150px; 
+    height: 150px;
+    margin: 0 auto 20px;
+    padding: 8px; 
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dee2e6;
+}
+
+.qr-code {
+    width: 100%;
+    height: 100%;
+    display: block; 
+    object-fit: contain;
+}
+
+
+/* Buttons */
+.payment-actions {
+    display: flex;
+    flex-direction: column; /* Stack buttons */
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px; /* Space above buttons */
+}
+
+.complete-payment-button,
+.cancel-payment-button {
+    padding: 12px 20px; /* Consistent padding */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem; /* Consistent font size */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.complete-payment-button {
+    background-color: #28a745; /* Green for confirm */
+    color: white;
+}
+
+.complete-payment-button:hover {
+    background-color: #218838; /* Darker green */
+}
+
+.cancel-payment-button {
+    background-color: #6c757d; /* Grey for cancel */
+    color: white;
+}
+
+.cancel-payment-button:hover {
+    background-color: #5a6268; /* Darker grey */
+}
+
+.complete-payment-button:active,
+.cancel-payment-button:active {
+    transform: scale(0.98); /* Slight shrink on click */
+}
+
+
+/* Close Button */
+#close-payment-modal {
+    position: absolute;
+    top: 15px; /* Adjusted position */
+    right: 15px;
+    background: none;
+    border: none;
+    color: #adb5bd; /* Lighter close icon */
+    font-size: 2.2rem; /* Larger close icon */
+    cursor: pointer;
+    line-height: 1;
+    padding: 0; /* Remove padding */
+    transition: color 0.2s ease;
+}
+
+#close-payment-modal:hover {
+    color: #495057; /* Darker on hover */
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+    #payment-modal {
+        padding: 20px;
+        max-width: 95%;
+    }
+    .payment-modal-content {
+        gap: 20px; /* Reduce gap on smaller screens */
+    }
+    .payment-modal-right {
+        border-left: none;
+        padding-left: 0;
+        padding-top: 20px;
+        border-top: 1px solid #dee2e6; /* Add top border instead */
+    }
+     #payment-modal h2 {
+        font-size: 1.4rem;
+    }
+    .form-group input {
+        padding: 10px;
+    }
+    .order-summary {
+        padding: 15px;
+    }
+    .payment-amounts .total-with-tax {
+        font-size: 1.1rem;
+    }
+     .qr-container {
+        width: 130px;
+        height: 130px;
+    }
+    .payment-actions {
+        margin-top: 15px;
+    }
+}

@@ -1,0 +1,106 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construmec Santo Tomé</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+    <script type="importmap">
+        {
+            "imports": {
+                "gsap": "https://cdn.skypack.dev/gsap@3.12.5",
+                "config": "./config.js",
+                "allProducts": "./allProducts.js" 
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/">Construmec Santo Tomé</a>
+        </div>
+        <nav>
+            <a href="#">Categorías</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Contacto</a>
+        </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar repuestos y herramientas...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="cart">
+            <a href="#">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrito</span>
+                <span id="cart-count">0</span>
+            </a>
+            <div id="cart-container">
+                <!-- Cart items will be dynamically inserted here -->
+                <p>El carrito está vacío.</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Encuentra todo lo que necesitas para tus reparaciones</h1>
+            <p>Repuestos originales y herramientas de alta calidad al mejor precio.</p>
+            <a href="#featured-products-section" class="cta-button">Ver Productos</a> 
+        </div>
+    </section>
+
+    <section class="exclusive-offers" id="exclusive-offers-section">
+        <h2>Ofertas Exclusivas</h2>
+        <div class="offers-grid">
+            <!-- Exclusive offer products will be dynamically inserted here -->
+            <p>Cargando ofertas...</p>
+        </div>
+    </section>
+
+    <section class="featured-products" id="featured-products-section">
+        <h2>Productos Destacados</h2>
+        <div class="product-grid">
+            <!-- Product cards will be dynamically inserted here -->
+            <p>Cargando productos...</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Construmec Santo Tomé. Todos los derechos reservados.</p> 
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="payment-method">
+                <p>Escanee el código QR para pagar</p>
+            </div>
+
+            <div class="qr-container">
+                <img src="/Imagen de WhatsApp 2025-02-07 a las 09.46.50_ade0c242.jpg" alt="QR code" class="qr-code">
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Modal Structure -->
+    <div id="modal-overlay"></div>
+    <div id="product-modal">
+        <button id="close-modal">&times;</button>
+        <img id="modal-product-image" src="" alt="Product Image">
+        <h2 id="modal-product-name">Product Name</h2>
+        <p id="modal-product-description">Product description goes here...</p>
+        <p id="modal-product-price">Price: $0.00</p>
+        <div class="quantity-control">
+            <button id="quantity-decrement">-</button>
+            <input type="number" id="modal-quantity" value="1" min="1">
+            <button id="quantity-increment">+</button>
+        </div>
+        <button id="modal-add-to-cart">Añadir al carrito</button>
+    </div>
+    
+    <script type="module" src="script.js"></script>
+</body>
+</html>
